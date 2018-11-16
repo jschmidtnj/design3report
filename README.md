@@ -1,7 +1,7 @@
 # design3report
 Latex report for design 3
 
-Made with Latex :).
+Made with Latex :). Tried using Jupyter but that is better for programming.
 
 ## Installation
 

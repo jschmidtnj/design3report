@@ -50,178 +50,98 @@
 
 \newpage
 
-\section{Introduction}
+% References to all attachments in the main body of the report
 
-\subsection{Abstract}
+\section{Abstract}
 
-The goal of our project is to aid astronauts on Extravehicular Activity (EVA) walks, which are activities or maneuvers performed by an astronaut outside a spacecraft. Currently EVAs are plagued by excessive amounts of information and minimal preparation time. During Gemini, Apollo, and the Space Shuttle era, specific space walks were heavily practiced prior to launch whereas now, the astronauts receive an EVA plan sometimes only a week prior to the walk \autocite{mannedspaceflight}. Moreover, astronauts no longer practice a specific EVA before launch, they prepare only generally for a multitude of possible EVAs. As shown in Figure \ref{fig:spacesuitdisplay} due to the amount of planning and memorization needed, astronauts utilize notes for guidance. These notes are placed on the astronauts hand which can be inconvenient when they need to utilize both while still having access to the information written. Our goal for NASA SUITS is to remedy this archaic system and provide a solution that will reduce the minutia the astronaut has to worry about and allow them to focus on the main tasks of the EVA.
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{EVA Reference Notebook}
-  \label{fig:spacesuitdisplay}
-\end{figure}
-
-Our solution addresses these issues on two fronts. Employing a Microsoft Hololens, we plan to implement a heads up display paired with minimalistic display actuators for a more fluid interaction with external information \autocite{mrbasics}. Moreover, we plan to implement image processing and localization tools in order to augment an astronauts environment, on command, and facilitate the astronauts actions. Our implementation includes 8 key functions:
-
-\begin{enumerate}
-\item Task Manager
-\item Suit Status Manager
-\item Handhold Helper
-\item Inertial Monitor
-\item “Way back home”
-\item Caution and Warning System
-\item Tool and Object Visualization
-\item External Actuators, Inertial Measurement Unit (IMU), and Microprocessor
-\end{enumerate}
-
-
-\subsection{Design Description}
-
-\subsubsection{Handhold Helper}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Augmented Handhold Illumination}
-  \label{fig:markedhandrail}
-\end{figure}
-
-As shown above in Figure \ref{fig:markedhandrail}, the handhold helper will augment the astronauts perception by illuminating the next handhold to grab during his/her transit around the spacecraft. To achieve this, the system will employ both real time camera vision and known positions of various elements. Given the unique shape and distinct color of the handhold, the initial iteration of the camera vision algorithm will combine an edge detection element and a simple RGB threshold filter. If this proves not robust enough, the next iteration will emulate the Viola-Jones facial detection algorithm and utilize haar wavelets and training samples of handhold images in various orientations \autocite{violajones}.
-
-For positioning, the system will utilize the known positions of all handholds relative to spacecraft, the pre-planned progression of handholds provided in an EVA outline, and the known position of the astronaut relative to the spacecraft. The handhold positions and planned progression are assumed to be provided by NASA prior to the EVA. The relative position of the astronaut will be supplied by our localization system, which will employ the Hololens built-in IMU and an external IMU that will interface with the Hololens. Using the known position of the next handhold relative to the spacecraft and the estimated position of the astronaut relative to the spacecraft, the position of the handhold relative to the astronaut can be found. Therefore, the estimated location of the handhold in the astronaut’s view is known and the handhold can be further discriminated via positioning.
-
-Overall, our system will correctly discriminate the next handhold by filtering with edges, color, and position. The combination of this information will provide a robust method of determining the next handhold. With the handhold determined, the Hololens will then illuminate the handhold a distinct color, providing the astronaut an intuitive sense of which handhold to grab next.
-
-Furthermore, in locating each handhold, the system can then compare its estimated position of the handhold within the astronaut’s view to the true position and back calibrate the relative positioning system. Assuming handholds will be relatively close, this allows for frequent error checking and calibration of the localization subsystem, preventing position estimation error from growing without bound.
-
-\subsubsection{HandholdSuit Status and Task Manager}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Main Panel with Suit Status and Task Manager}
-  \label{fig:suitdatatasklist}
-\end{figure}
-
-The main User Interface (UI) is intended to be as minimalistic and intuitive as possible; minimalistic so as not to detract from the astronaut’s field of view and intuitive to allow for quick and seamless use. On voice command, via the hololens and unity, the main panel displayed above in Figure \ref{fig:suitdatatasklist} will appear. From this main panel, the astronaut can select between two options - suit status and task list. This selection will be done by physical actuators that the astronaut has located on the glove. The Suit Status displays all suit telemetry in a minimalistic manner, with an interface similar to Figure \ref{fig:moresuitmetrics}. This data is mocked up and emulated for our use with a website that takes in data from a form and alerts the hololens and our program of the change to display. Showing our capability to dynamically change our information and eventually integrate with various endpoints to retrieve such information.
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Suit Status UI}
-  \label{fig:moresuitmetrics}
-\end{figure}
-
-Again, this panel aims to maintain the astronaut’s field of view. Therefore, all metrics are placed outside of the astronaut’s main focus. The suit status panel shows the current suit pressure at differing regions, the astronaut’s heart rate, the current battery percentage, and oxygen levels. All metrics have intuitive indications of status: nominal operation in green, cautions in yellow, and warnings in red. For example, in the image above, battery level is dangerously low, primary O\textsubscript{2} may require some attention, and secondary O\textsubscript{2} is nominal. This color scheme will hopefully provide an intuitive sense of the suits status. The second panel, the Task Manager, displays the main task for the astronaut to complete Figure \ref{fig:task4}.
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Main Task UI}
-  \label{fig:task4}
-\end{figure}
-
-The standard view is as shown above in Figure \ref{fig:task4}, where only the next major task of the EVA is displayed. If need be, the astronaut can access subtasks required to complete the main task via an actuator toggle (Figure \ref{fig:moresubtasks}).
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Expanded Task View}
-  \label{fig:moresubtasks}
-\end{figure}
-
-It is assumed that the tasks and subtasks will be meticulously prepared well ahead of the EVA, in which case all tasks and subtasks will be uploaded the the Hololens prior to the EVA. However, if and when plans change during the space walk, our system incorporates real time editing and addition of tasks and subtasks.
-
-To input the tasks and subtasks for the prototype system, a progressive web application is used. It is currently hosted on Firebase but can be deployed anywhere, including on servers on the ISS, with slight modification. Tasks can be added in real time from multiple ground station nodes, and the webapp is updated in real time as well. This way both the astronaut and the ground station see the most up-to-date tasks and subtasks at all times. Additionally, the space suit sends sensor data and metrics to the webapp so the ground station can monitor the integrity of the suit. See Figure \ref{fig:taskmanagment} and Figure \ref{fig:subtask} for the user interface of the web application (\href{https://spacesuit.site}{spacesuit.site}). See the github repo for the source code (\href{https://github.com/jschmidtnj/spacesuits}{@jschmidtnj.SpaceSuits}).
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Suit Metrics Panel}
-  \label{fig:groundcontrolsuitmetrics}
-\end{figure}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Task Entry and View Panel}
-  \label{fig:taskmanagment}
-\end{figure}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Tool and Object Visualization}
-  \label{fig:subtask}
-\end{figure}
-
-Displayed above in Figure \ref{fig:groundcontrolsuitmetrics} is an optional addition to the Task Manager. If a task requires the use of an uncommon tool or manipulation of an unusual object, the astronaut has the option of toggling the appearance of this tool next to the task manager. It is assumed that the CAD files any of these tools or objects in question will be uploaded to the Hololens well before the EVA and appear only on command from the astronaut via peripheral actuation.
-
-\subsubsection{Inertial Monitor Panel}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{Inertial Monitor Panel}
-  \label{fig:suitmetrics}
-\end{figure}
-
-The inertial monitor as shown above in Figure \ref{fig:suitmetrics} will provide a simple way to view the current inertial status. This panel will be used primarily for displaying warnings regarding the inertial data, for example if the astronaut is accelerating too significantly in any given direction as shown in Figure \ref{fig:suitmetrics} by the “Acc Z” in red.  This panel can also be accessed via voice command by the astronaut. The inertial data for this panel will be provided by both the Hololens internal IMU and an external IMU we will be incorporating into our system.
-
-\subsubsection{Way Back Home}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{assets/logo.png}
-  \caption{“Way Back Home” Direction Indicator}
-  \label{fig:wayhome}
-\end{figure}
-
-The “Way Back Home” \ref{fig:wayhome} will appear only in emergency situations. The system will continuously keep a position relative to the spacecraft access point. In times of emergency when an astronaut must get inside the spacecraft as quick as possible, this panel will appear and display a red indicator as shown in Figure \ref{fig:wayhome} pointing toward the access point: an arrow when the access point is in the field of view and a red crescent when not in the field of view. 
-
-\subsubsection{Caution and Warning System}
-
-The caution and warning system will continuously monitor various metrics and employ both audio and the panels above to convey the issues. The system will have two sets of thresholds for each metric being monitored: one for caution and one for warning. The metrics that the system will monitor are as follows:  all suit telemetry, all inertial data, and task addition and deletion. For the suit telemetry, all cautions will be displayed in yellow on the panel. A caution will not trigger the panel to appear, but audio will notify the astronaut of the caution. A warning will be displayed in red on the panel and will trigger the panel to appear automatically. The panel will also be accompanied by audio indicating the warning. For example, if primary or secondary O2 drops below a dangerous pressure, the Suit Status panel will appear and the O2 bar graphic will be displayed in red. The inertial data will follow similar operation: a caution will trigger audio only and a warning will trigger the panel to appear accompanied by audio. Thresholds for the inertial data will be set such that a warning occurs only if the astronaut seems to be out of control. The appearance of this panel will hopefully aid the astronaut in regaining control as he or she can now see which degrees of motion are unstable or too high. For the task manager, the addition or deletion of a task can be set to caution or warning at the discretion of the operator editing the tasks. A caution will be indicated with audio and a warning will cause the Task Manager panel to appear, displaying the updated main task and subtask-expansion where an addition or deletion has occurred.
-
-\subsubsection{Physical Actuators, IMU, and Microprocessor}
-
-In order to control certain aspects of the Hololens operation, Physical Actuators will be added to the gloves. The physical actuators will consist of four strain gauges located on the middle knuckles of four fingers of one hand (thumb, pointer, middle, and ring), as that is the point of maximum deflection. Different predetermined combinations of finger movements will correspond to different actions and the actuators will be activated only after voice command to prevent accidental control of the Hololens carrying out manual tasks. The strain gauge output will be connected to a microprocessor, such as an arduino uno or raspberry pi. An auxiliary IMU will also interface with the microprocessor to allow for more refined inertial data when combined with the built-in Hololens IMU. The microprocessor will then continuously communicate with the Hololens via a bluetooth dongle to provide a fully-embedded system which does not rely on external networks.
-
-\subsection{Concept of Operations (CONOPS)}
-
-The goal of this project was to create a user friendly interface to help facilitate astronauts actions on EVA walks. With handhold helpers that illuminate the correct sequence of transit between worksites, our goal of alleviating the amount of procedures that astronauts have to remember is accomplished. In practice we hope that astronauts will be able to rely on this system to get them around so that they can concentrate more on the overall goals of their missions than having a trivial tasks in the back of their minds. Accomplishing this through a edge detection and a RGB filter, we aim to provide this information with low latency compared to other more complex and time consuming methods.
-
-With the advent of a display for suit telemetry we aim to help put astronauts’ minds at ease as they have full access to and can be aware of the conditions they are in. We hope they utilize as their one stop shop for getting important information without struggling to look for where it is. Mocking this up with dynamic data from a form was the best way to display this capability in real time.
-
-The tasks list is one of the biggests advantages of moving to an augmented reality interface. With a heads up display (HUD) of current and planned tasks we hope to help astronauts have an easy to use and accessible hub to relieve the burden of trying to read the objectives of a mission on their hand and by doing so restricting the use of their body. This implementation as stated before is set up to be able to handle dynamic changes which gives them the opportunity to adjust mid mission and accomplish more on each excursion. This feature achieves the goal of aiding the astronauts in their tasks and helps reduce the stress in forcing oneself to remember important but small details.
-
-The way back, inertial monitor, and warning system is our way of further making our system a command center for an astronaut. It helps aid the astronaut in coordinating himself in dangerous situations which, while prepared for, can be assisted using the system we propose.
-
-Our physical actuators are the most optimal in this case in order to have the astronauts have an efficient way to communicate with the system while still allowing them full use of their hands. When deciding on the specific way to activate the device, hand gestures were also suggested but this system would be difficult for astronauts to use in space as placing a hand directly in front of the hololens would prove difficult when restricted by a spacesuit. String gauges on the other hand allow an astronaut to activate the commands while not in view of the hololens. The biggest benefit of string gauges is that they can be fine tuned to prevent accidental activations and only activate with specific positions.
-
-\subsection{Human-in-the-loop (HITL) Testing}
-
-\begin{enumerate}
-\item Actuator Testing: The actuators will be tested with a group of randomly chosen students on campus for feasibility and user experience. The group of students will be asked to perform a variety of navigational tasks in a controlled test environment, including navigating between the menus in the user interface, selecting options for tasks, and viewing system diagnostics. The ability for test subjects to complete these tasks using the actuators, and any comments as to making the experience more intuitive, will be documented and extrapolated. The test subjects will be randomly chosen, with a mixed population to accommodate various hand sizes and other metrics.
-\item Handhold Helper: The second test will involve the handhold helper functionality of the helmet. Randomly chosen test subjects will be asked to locate a handhold in a controlled environment using the AR system, and the ease in which this task is performed will be recorded.
-\item Orientation Help: The third test will involve the orientation helper. A randomly chosen subject test group will move their heads around with the helper activated, and test how accurate the orientation guidance is. They will rate the experience on a scale.
-\item Web User Interface: To test the ground control user interface, we will again utilize a randomly-selected pool of test subjects to complete certain tasks in the web interface. These procedures in the ground control app would include adding certain tasks for the astronaut to complete, and monitoring the suit metrics data. The ease of use for the website and possible additional features will be recorded.
-\end{enumerate}
-
-\subsection{Team Project Schedule}
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=1\textwidth]{assets/logo.png}
-  \caption{Schedule}
-  \label{fig:supertaskschedule}
-\end{figure}
+The goal of our project is blank.
 
 \newpage
 
-\subsection{Technical References}
+\section{Introduction}
+
+\subsection{Project objectives}
+
+Project objectives (i.e. design, build, final truss selection: e.g highest load to failure; lowest material; best strength to weight; etc.)
+
+\subsection{Project specifications}
+
+Summary of project specifications (i.e. requirements, restrictions, construction materials)
+
+\subsection{Approach}
+
+Approach to project planning, scheduling, and completion.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.75\textwidth]{assets/logo.png}
+  \caption{scheduling chart}
+  \label{fig:spacesuitdisplay}
+\end{figure}
+
+\section{Discussion}
+
+Introductory paragraph to Design Section content
+
+\subsection{Design}
+
+\subsubsection{Overview}
+
+Overview of the design process
+
+\subsubsection{Choice and Reasoning}
+
+Truss design with alternatives considered in insight into your design decisions
+
+\subsubsection{Design Analysis summary}
+
+Design analysis summary as developed from Truss Analyzer with interpretation of data
+
+\subsubsection{Fabrication}
+
+Fabrication concerns and considerations in the design phase
+
+\newpage
+
+\section{Conclusion and Recommendations}
+
+\subsection{accomplishments}
+
+Describes the work in terms of accomplishments, both successful and unsuccessful
+
+\subsection{recommendations}
+
+Provides recommendations to improve the project in terms of basic knowledge, materials, equipment, or other guidance
+
+Discuss what you would have done differently given the opportunity
+
+\newpage
+
+\section{Attachments}
+
+\subsection{Work Chart}
+
+Work break down structure and organization chart with roles and responsibilities
+
+\newpage
+
+\subsection{Truss Analysis}
+
+Truss Analysis jpg and csv printouts for final truss design
+
+\newpage
+
+\subsection{Alternatives Truss Analysis}
+
+Truss Analysis jpg and csv printouts for at least two alternate designs considered
+
+\newpage
+
+\subsection{Data}
+
+Brass compression data, charts, and formulas
+
+\newpage
 
 \printbibliography
 
