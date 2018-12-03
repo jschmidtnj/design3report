@@ -1,7 +1,7 @@
 # design3report
 Latex report for design 3
 
-Made with Latex :).
+Made with Latex :). Tried using Jupyter but that is better for programming.
 
 ## Installation
 
@@ -13,10 +13,3 @@ Made with Latex :).
 1. `pdflatex main`
 2. `biber main`
 3. `pdflatex main`
-
-## Git
-
-1. `git pull origin master`
-2. `git add -A`
-3. `git commit -m <message>`
-4. `git push origin master`

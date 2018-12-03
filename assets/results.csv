@@ -1,0 +1,27 @@
+D3 SECTION S               ,,,,,,,,
+Name ,T,Truss Design Parameters,,,Truss Fabrication Results,,,
+,,Load (lbs),Length (in), Load/ Length Ratio   ,Weight (g),Mass/ Length Ratio,Load at Failure (lbs),Load Error (%)
+"Albarella, Domenico",1,424.7,67.43,6.3,93,1.38,448,5.5
+"Cooper, Anna",,,,,,,,
+"Kennedy, Sean",,,,,,,,
+"Balgahoom, Jordan",2,447,66.2,6.8,90,1.36,475,6.3
+"Chesterman, Andrew",,,,,,,,
+"Schmidt, Joshua",,,,,,,,
+"Cimicata, Christopher",3,375.2,58.93,6.4,85,1.44,120,-68.0
+"Daly, Hunter",,,,,,,,
+"Knurek, Sophia",,,,,,,,
+"Deitz, Joseph",4,346.1,66.68,5.2,88,1.32,275,-20.5
+"Li, David",,,,,,,,
+"Pugliese, Jamie",,,,,,,,
+"Dupuy, Matthieu",5,467.6,67.52,6.9,128,1.90,463,-1.0
+"Liu, Yijun",,,,,,,,
+"Sparta, Nicholas",,,,,,,,
+"Capron, Chase",6,350,59.8,5.9,89,1.49,154,-56.0
+"Galas, Robert",,,,,,,,
+"Schwiebert, Joan",,,,,,,,
+"Maurelli, Mark",7,506,68.34,7.4,107,1.57,436,-13.8
+"Sloat, James",,,,,,,,
+"Smith, Connor",,,,,,,,
+"Froehlich, Brynn",8,346.1,68.9,5.0,106,1.54,398,15.0
+"Thomson, Benjamin",,,,,,,,
+"Underwood, Andrew",,,,,,,,
